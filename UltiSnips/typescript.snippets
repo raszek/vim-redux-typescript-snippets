@@ -9,9 +9,65 @@ export const FETCH_`!p snip.rv = t[1].upper()`_ERROR =   '[$3]FETCH_`!p snip.rv 
 
 export const actions = {
   fetch${1:Data}Request: () => createAction(FETCH_`!p snip.rv = t[1].upper()`_REQUEST),
-  fetch$1Success: (surveys: $2Model[]) => createAction(FETCH_`!p snip.rv = t[1].upper()`_SUCCESS, surveys),
+  fetch$1Success: (${4:records}: $2Model[]) => createAction(FETCH_`!p snip.rv = t[1].upper()`_SUCCESS,
+	${4:records}),
   fetch$1Error: (error: any) => createAction(FETCH_`!p snip.rv = t[1].upper()`_ERROR, error),
 }
 
 export type Actions = ActionsUnion<typeof actions>
+endsnippet
+
+snippet reducer "Reducer" b
+import { combineReducers } from 'redux';
+
+import * as fromActions from './Actions';
+
+export type SurveyState = {
+  loading: boolean;
+};
+
+export const ${1:data}Reducer = combineReducers<SurveyState, fromActions.Actions>({
+  loading: (state = false, action: fromActions.Actions): boolean => {
+    switch (action.type) {
+      case fromActions.FETCH_`!p snip.rv = t[1].upper()`_REQUEST: {
+        return true;
+      }
+      case fromActions.FETCH_`!p snip.rv = t[1].upper()`_SUCCESS:
+      case fromActions.FETCH_`!p snip.rv = t[1].upper()`_ERROR:
+        return false;
+      default:
+        return state;
+    }
+  },
+});
+endsnippet
+
+snippet saga "Saga" b
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { ActionsOfType } from '@martin_hotell/rex-tils';
+
+import { fetch${1:Data}Request } from '../../../../client/Api';
+import * as fromActions from './Actions';
+
+const { actions } = fromActions;
+
+function* fetch$1(action: ActionsOfType<fromActions.Actions, typeof fromActions.FETCH_`!p snip.rv = t[1].upper()`_REQUEST>) {
+  try {
+    const surveys = yield call(fetch$1Request);
+
+    yield put(actions.fetch$1Success(surveys));
+  } catch (e) {
+    yield put(actions.fetch$1Error(e));
+  }
+}
+
+function* fetch$1Fork() {
+  yield takeEvery(fromActions.FETCH_`!p snip.rv = t[1].upper()`_REQUEST, fetch$1)
+}
+
+export default function* rootSaga() {
+  yield all([
+    fork(fetch$1Fork),
+  ]);
+}
 endsnippet
