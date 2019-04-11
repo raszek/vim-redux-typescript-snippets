@@ -1,0 +1,17 @@
+snippet actions "Actions" b
+import { ActionsUnion, createAction } from '@martin_hotell/rex-tils'
+
+import { ${2:Data}Model } from '../../Models/$2Model';
+
+export const FETCH_`!p snip.rv = t[1].upper()`_REQUEST = '[${3:Module}]FETCH_`!p snip.rv = t[1].upper()`_REQUEST';
+export const FETCH_`!p snip.rv = t[1].upper()`_SUCCESS = '[$3]FETCH_`!p snip.rv = t[1].upper()`_SUCCESS';
+export const FETCH_`!p snip.rv = t[1].upper()`_ERROR =   '[$3]FETCH_`!p snip.rv = t[1].upper()`_ERROR';
+
+export const actions = {
+  fetch${1:Data}Request: () => createAction(FETCH_`!p snip.rv = t[1].upper()`_REQUEST),
+  fetch$1Success: (surveys: $2Model[]) => createAction(FETCH_`!p snip.rv = t[1].upper()`_SUCCESS, surveys),
+  fetch$1Error: (error: any) => createAction(FETCH_`!p snip.rv = t[1].upper()`_ERROR, error),
+}
+
+export type Actions = ActionsUnion<typeof actions>
+endsnippet
